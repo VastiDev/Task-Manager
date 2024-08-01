@@ -107,6 +107,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>task-manager</finalName>
     </build>
 
     <repositories>
