@@ -29,6 +29,8 @@ jobs:
         cache: maven
 
     - name: Build with Maven
+      env:
+        JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
       run: mvn clean install
 
     - name: Build & push Docker image
