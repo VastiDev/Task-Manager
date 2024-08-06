@@ -52,7 +52,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: https://sonarcloud.io
         run: mvn clean verify sonar:sonar \
-          -Dsonar.organization=your-organization \
-          -Dsonar.projectKey=your-project-key \
+          -Dsonar.organization=vastidev \
+          -Dsonar.projectKey=VastiDev_Task-Manager \
           -Dsonar.host.url=${{ env.SONAR_HOST_URL }} \
           -Dsonar.login=${{ env.SONAR_TOKEN }}
