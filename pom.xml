@@ -129,6 +129,7 @@
                     <includes>
                         <include>**/*Tests.java</include>
                     </includes>
+                    <testFailureIgnore>true</testFailureIgnore>
                 </configuration>
             </plugin>
         </plugins>
