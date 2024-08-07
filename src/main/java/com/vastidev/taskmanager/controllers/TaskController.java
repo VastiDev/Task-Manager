@@ -5,6 +5,7 @@ import com.vastidev.taskmanager.model.dtos.TaskDto;
 import com.vastidev.taskmanager.model.entity.Task;
 import com.vastidev.taskmanager.services.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -21,12 +22,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/task")
+@RequiredArgsConstructor
 public class TaskController {
-    @Autowired
-    private TaskService taskService;
 
-    @Autowired
-    private TaskAssembler taskAssembler;
+    private final TaskService taskService;
+
+    private final TaskAssembler taskAssembler;
 
     @PostMapping("/{userId}")
     @ResponseStatus(HttpStatus.CREATED)
@@ -45,7 +46,7 @@ public class TaskController {
     public CollectionModel<EntityModel<Task>> getAll() {
         List<EntityModel<Task>> tasks = taskService.findAll().stream()
                 .map(taskAssembler::toModel)
-                .collect(Collectors.toList());
+                .toList();
 
         return CollectionModel.of(tasks,linkTo(methodOn(TaskController.class).getAll()).withSelfRel());
     }
@@ -55,8 +56,7 @@ public class TaskController {
     @Operation(summary = "Get task By Id")
     public EntityModel<Task> taskById(@PathVariable UUID id) {
         Task task = taskService.getById(id);
-        EntityModel<Task> entityModel = taskAssembler.toModel(task);
-        return entityModel;
+        return taskAssembler.toModel(task);
     }
 
     @DeleteMapping("/{id}")

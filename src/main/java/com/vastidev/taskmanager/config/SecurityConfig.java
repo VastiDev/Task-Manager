@@ -3,6 +3,7 @@ package com.vastidev.taskmanager.config;
 import com.vastidev.taskmanager.utils.JwtAuthenticationFilter;
 import com.vastidev.taskmanager.utils.JwtUtils;
 import com.vastidev.taskmanager.repository.AppUserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,13 +26,11 @@ import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Autowired
-    private JwtUtils jwtUtils;
 
-    @Autowired
-    private AppUserRepository userRepository;
+    private final AppUserRepository userRepository;
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -44,7 +43,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,  JwtUtils jwtUtils) throws Exception {
         JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter();
         jwtAuthenticationFilter.setJwtUtils(jwtUtils);
         jwtAuthenticationFilter.setUserDetailsService(userDetailsService());

@@ -6,6 +6,7 @@ import com.vastidev.taskmanager.model.dtos.AppUserResponse;
 import com.vastidev.taskmanager.model.entity.AppUser;
 import com.vastidev.taskmanager.services.AppUserService;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -21,12 +22,13 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/user")
+@RequiredArgsConstructor
 public class AppUserController {
-    @Autowired
-    private AppUserService userService;
 
-    @Autowired
-    private AppUserAssembler appUserAssembler;
+    private final AppUserService userService;
+
+
+    private final AppUserAssembler appUserAssembler;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

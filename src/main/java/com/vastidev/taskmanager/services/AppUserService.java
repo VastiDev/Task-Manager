@@ -1,11 +1,11 @@
 package com.vastidev.taskmanager.services;
 
-import com.vastidev.taskmanager.assembler.AppUserAssembler;
+
 import com.vastidev.taskmanager.exceptions.AppUserNotFoundException;
 import com.vastidev.taskmanager.model.dtos.AppUserDto;
 import com.vastidev.taskmanager.model.entity.AppUser;
 import com.vastidev.taskmanager.repository.AppUserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,15 +14,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class AppUserService {
 
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
-    @Autowired
-    private AppUserRepository userRepository;
-
+    private final AppUserRepository userRepository;
 
     public AppUser save(AppUserDto userDto) {
         AppUser newAppUser = new AppUser(userDto);

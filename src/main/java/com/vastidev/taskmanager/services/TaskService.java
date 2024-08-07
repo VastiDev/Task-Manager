@@ -8,6 +8,7 @@ import com.vastidev.taskmanager.model.entity.AppUser;
 import com.vastidev.taskmanager.model.entity.Task;
 import com.vastidev.taskmanager.repository.AppUserRepository;
 import com.vastidev.taskmanager.repository.TaskRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,16 +19,15 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
+@RequiredArgsConstructor
 public class TaskService {
 
-    @Autowired
-    private TaskRepository taskRepository;
 
-    @Autowired
-    private TaskAssembler taskAssembler;
+    private final TaskRepository taskRepository;
 
-    @Autowired
-    private AppUserRepository userRepository;
+    private final TaskAssembler taskAssembler;
+
+    private final AppUserRepository userRepository;
 
     public Task save(TaskDto taskDto, UUID idUser) {
         AppUser user = userRepository.findById(idUser)
@@ -37,8 +37,8 @@ public class TaskService {
     }
 
     public List<Task> findAll() {
-        return StreamSupport.stream(taskRepository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
+        return taskRepository.findAll().stream()
+                .toList();
 
     }
 
