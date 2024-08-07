@@ -29,7 +29,7 @@ public class AuthController {
 
     @PostMapping("/login")
     @Operation(summary = "Login user and return JWT token")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
+    public ResponseEntity<AuthenticationResponse> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authenticationRequest.username(), authenticationRequest.password())
         );

@@ -1,12 +1,10 @@
 package com.vastidev.taskmanager.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vastidev.taskmanager.model.dtos.TaskDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;

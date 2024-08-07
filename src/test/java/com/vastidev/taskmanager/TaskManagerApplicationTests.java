@@ -10,6 +10,8 @@ class TaskManagerApplicationTests {
 	@Test
 	@Disabled("Temporarily disable the context test for SonarQube integration")
 	void contextLoads() {
+		// This test is intentionally left empty because it is disabled for SonarQube integration.
+		// The context load test will be implemented or re-enabled in the future as needed.
 	}
 
 }
