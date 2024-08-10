@@ -41,7 +41,7 @@ public class AppUserService {
             log.info("User found with ID: {}", idUser);
             return userOptional.get();
         } else {
-            log.error("User not found with ID: {}", idUser);
+            getError(idUser);
             throw new AppUserNotFoundException(idUser);
         }
     }
@@ -51,6 +51,7 @@ public class AppUserService {
         return userRepository.findAll();
     }
 
+
     public void deleteById(UUID idUser) {
         log.info("Deleting user with ID: {}", idUser);
         Optional<AppUser> appUser = userRepository.findById(idUser);
@@ -58,7 +59,7 @@ public class AppUserService {
             userRepository.deleteById(idUser);
             log.info("User deleted with ID: {}", idUser);
         } else {
-            log.error("User not found with ID: {}", idUser);
+            getError(idUser);
             throw new AppUserNotFoundException(idUser);
         }
     }
@@ -66,12 +67,15 @@ public class AppUserService {
     public AppUser updateById(UUID idUser, AppUserDto userDto) {
         log.info("Updating user with ID: {}", idUser);
         AppUser user = userRepository.findById(idUser).orElseThrow(() -> {
-            log.error("User not found with ID: {}", idUser);
+            getError(idUser);
             return new AppUserNotFoundException(idUser);
         });
         user.updateFromDto(userDto);
         AppUser updatedUser = userRepository.save(user);
         log.info("User updated with ID: {}", updatedUser.getId());
         return updatedUser;
+    }
+    private static void getError(UUID idUser) {
+        log.error("User not found with ID: {}", idUser);
     }
 }

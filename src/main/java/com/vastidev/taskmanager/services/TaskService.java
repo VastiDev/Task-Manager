@@ -37,10 +37,12 @@ public class TaskService {
         return savedTask;
     }
 
+
     public List<Task> findAll() {
         log.info("Fetching all tasks");
         return taskRepository.findAll().stream().toList();
     }
+
 
     public Task getById(UUID id) {
         log.info("Fetching task with ID: {}", id);
@@ -49,10 +51,12 @@ public class TaskService {
             log.info("Task found with ID: {}", id);
             return taskAssembler.toModel(task.get()).getContent();
         } else {
-            log.error("Task not found with ID: {}", id);
+            getError(id);
             throw new TaskNotFoundException(id);
         }
     }
+
+
 
     public void deleteById(UUID id) {
         log.info("Deleting task with ID: {}", id);
@@ -61,20 +65,26 @@ public class TaskService {
             taskRepository.deleteById(id);
             log.info("Task deleted with ID: {}", id);
         } else {
-            log.error("Task not found with ID: {}", id);
+            getError(id);
             throw new TaskNotFoundException(id);
         }
     }
 
+
     public Task updateById(UUID id, TaskDto taskDto) {
         log.info("Updating task with ID: {}", id);
         Task newTask = taskRepository.findById(id).orElseThrow(() -> {
-            log.error("Task not found with ID: {}", id);
+            getError(id);
             return new TaskNotFoundException(id);
         });
         newTask.updateFromDto(taskDto);
         Task updatedTask = taskRepository.save(newTask);
         log.info("Task updated with ID: {}", updatedTask.getId());
         return updatedTask;
+    }
+
+
+    private static void getError(UUID id) {
+        log.error("Task not found with ID: {}", id);
     }
 }

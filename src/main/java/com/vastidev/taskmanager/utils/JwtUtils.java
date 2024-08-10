@@ -1,17 +1,16 @@
 package com.vastidev.taskmanager.utils;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.ExpiredJwtException;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Component
@@ -23,7 +22,9 @@ public class JwtUtils {
     private String secret;
 
     public JwtUtils() {
-        LOGGER.info(String.format("Secret Key (constructor): %s", secret));
+        if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.info(String.format("Secret Key (constructor): %s", secret));
+        }
     }
 
     public String extractUsername(String token) {
@@ -40,7 +41,9 @@ public class JwtUtils {
     }
 
     private Claims extractAllClaims(String token) {
-        LOGGER.info(String.format("Secret Key (extractAllClaims): %s", secret));
+        if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.info(String.format("Secret Key (extractAllClaims): %s", secret));
+        }
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
 
@@ -54,10 +57,16 @@ public class JwtUtils {
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
-        LOGGER.info(String.format("Secret Key (createToken): %s", secret));
-        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+        if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.info(String.format("Secret Key (createToken): %s", secret));
+        }
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(subject)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
-                .signWith(SignatureAlgorithm.HS256, secret).compact();
+                .signWith(SignatureAlgorithm.HS256, secret)
+                .compact();
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {

@@ -4,7 +4,6 @@ import com.vastidev.taskmanager.utils.JwtAuthenticationFilter;
 import com.vastidev.taskmanager.utils.JwtUtils;
 import com.vastidev.taskmanager.repository.AppUserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

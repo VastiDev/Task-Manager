@@ -11,7 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class AppUserServiceTest {
+class AppUserServiceTest {
 
     @Mock
     private AppUserRepository repository;
@@ -61,9 +60,9 @@ public class AppUserServiceTest {
     void testGetById(){
         UUID testUUID = UUID.fromString("93761645-9cf0-4465-8f5c-de93952d9321");
 
-        AppUser newAppUser = new AppUser();
-        newAppUser.setUsername("username");
-        newAppUser.setId(testUUID);
+        AppUser appUser = new AppUser();
+        appUser.setUsername("username");
+        appUser.setId(testUUID);
 
         when(repository.findById(testUUID)).thenReturn(Optional.of(newAppUser));
 

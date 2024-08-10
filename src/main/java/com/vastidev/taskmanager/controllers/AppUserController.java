@@ -7,7 +7,6 @@ import com.vastidev.taskmanager.model.entity.AppUser;
 import com.vastidev.taskmanager.services.AppUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
