@@ -1,4 +1,4 @@
-package com.vastidev.taskmanager;
+package com.vastidev.taskmanager.services;
 
 import com.vastidev.taskmanager.assembler.TaskAssembler;
 import com.vastidev.taskmanager.model.dtos.TaskDto;
