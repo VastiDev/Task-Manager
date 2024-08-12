@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
@@ -22,9 +23,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import java.util.List;
 import java.util.UUID;
+
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -57,6 +59,7 @@ public class AppUserControllerTest {
     private AppUserDto appUserDto;
     private AppUserResponse appUserResponse;
     private UUID userId;
+    private EntityModel<AppUserResponse> appUserEntityModel;
 
     @BeforeEach
     void setup(){
@@ -69,9 +72,9 @@ public class AppUserControllerTest {
 
         appUserResponse = new AppUserResponse(appUser.getId().toString(), appUser.getUsername(), appUser.getEmail());
 
-        EntityModel<AppUser> entityModel = EntityModel.of(appUser,
+        EntityModel<AppUserResponse> appUserEntityModel = EntityModel.of(appUserResponse,
                 linkTo(methodOn(AppUserController.class).userById(appUser.getId())).withSelfRel(),
-                linkTo(methodOn(AppUserController.class).getAll()).withRel("tasks"));
+                linkTo(methodOn(AppUserController.class).getAll()).withRel("All users"));
     }
 
     @Test
@@ -88,21 +91,40 @@ public class AppUserControllerTest {
     }
 
     @Test
-    void testGetAll(){
-        userId = UUID.randomUUID();
+    void testGetAll() throws Exception {
         AppUserDto appUserDto2 = new AppUserDto("username2", "password2", "user2@gmail.com");
         AppUser newAppUser = new AppUser(appUserDto2);
         newAppUser.setId(UUID.randomUUID());
         List<AppUser> allUsers = List.of(appUser, newAppUser);
 
         when(userService.getAll()).thenReturn(allUsers);
-        when(userAssembler.toModel(any(AppUser.class))).thenAnswer(invocation -> {
-            AppUser u = invocation.getArgument(0);
-            return EntityModel.of(u,
-                    linkTo(methodOn(AppUserController.class).userById(u.getId())).withSelfRel(),
-                    linkTo(methodOn(AppUserController.class).getAll()).withRel("All users"));
-        });
+
+
+        CollectionModel<EntityModel<AppUserResponse>> collectionModel = CollectionModel.of(
+                List.of(
+                        EntityModel.of(new AppUserResponse(appUser.getId().toString(), appUser.getUsername(), appUser.getEmail())),
+                        EntityModel.of(new AppUserResponse(newAppUser.getId().toString(), newAppUser.getUsername(), newAppUser.getEmail()))
+                ),
+                linkTo(methodOn(AppUserController.class).getAll()).withSelfRel()
+        );
+        when(userAssembler.toCollectionModel(anyList())).thenReturn(collectionModel);
+
+        mockMvc.perform(get("/user")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$._embedded.appUserResponseList", hasSize(2)))
+                .andExpect(jsonPath("$._embedded.appUserResponseList[0].username").value(appUser.getUsername()))
+                .andExpect(jsonPath("$._embedded.appUserResponseList[0].email").value(appUser.getEmail()))
+                .andExpect(jsonPath("$._embedded.appUserResponseList[1].username").value(newAppUser.getUsername()))
+                .andExpect(jsonPath("$._embedded.appUserResponseList[1].email").value(newAppUser.getEmail()));
+
+        verify(userService, times(1)).getAll();
+        verify(userAssembler, times(1)).toCollectionModel(anyList());
     }
+
+
+
 
     @Test
     void testFindById() throws Exception {

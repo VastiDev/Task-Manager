@@ -1,5 +1,7 @@
 package com.vastidev.taskmanager.config;
 
+import com.vastidev.taskmanager.utils.JwtUtils;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -32,4 +34,9 @@ public class TestSecurityConfig {
         return username -> null;
     }
 
+    @Bean
+    @ConditionalOnMissingBean(JwtUtils.class)
+    public JwtUtils jwtUtils() {
+        return new JwtUtils();
+    }
 }

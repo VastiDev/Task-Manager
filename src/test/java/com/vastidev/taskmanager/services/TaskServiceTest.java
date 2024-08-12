@@ -37,11 +37,12 @@ public class TaskServiceTest {
     @InjectMocks
     private TaskService service;
 
-    private UUID userId;
+
     private Task task;
     private TaskDto taskDto;
 
     private AppUser appUser;
+    private UUID userId;
 
     @BeforeEach
     void setup(){
