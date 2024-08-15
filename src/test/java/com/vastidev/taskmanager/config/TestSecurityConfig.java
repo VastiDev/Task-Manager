@@ -30,7 +30,7 @@ public class TestSecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
+    public UserDetailsService testUserDetailsService() {
         return username -> null;
     }
 

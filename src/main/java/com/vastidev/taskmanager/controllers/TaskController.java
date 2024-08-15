@@ -27,7 +27,10 @@ public class TaskController {
 
     @PostMapping("/{userId}")
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Create a task for a User")
+    @Operation(
+            summary = "Create a task for a User",
+            description = "Create a new task associated with the user specified by the user ID. Requires JWT authentication."
+    )
     public ResponseEntity<EntityModel<Task>> createNewTask(@PathVariable UUID userId, @RequestBody TaskDto taskDto){
         Task savedTask  = taskService.save(taskDto, userId);
         EntityModel<Task> entityModel = taskAssembler.toModel(savedTask);
@@ -38,7 +41,10 @@ public class TaskController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Get all tasks")
+    @Operation(
+            summary = "Get all tasks",
+            description = "Retrieve a list of all tasks in the system. Requires JWT authentication."
+    )
     public CollectionModel<EntityModel<Task>> getAll() {
         List<EntityModel<Task>> tasks = taskService.findAll().stream()
                 .map(taskAssembler::toModel)
@@ -49,7 +55,10 @@ public class TaskController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Get task By Id")
+    @Operation(
+            summary = "Get task By Id",
+            description = "Retrieve the details of a specific task by its ID. Requires JWT authentication."
+    )
     public EntityModel<Task> taskById(@PathVariable UUID id) {
         Task task = taskService.getById(id);
         return taskAssembler.toModel(task);
@@ -57,7 +66,10 @@ public class TaskController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Operation(summary = "Delete by Id")
+    @Operation(
+            summary = "Delete task by Id",
+            description = "Delete a task specified by its ID. Requires JWT authentication."
+    )
     ResponseEntity<Void> deleteTask(@PathVariable UUID id){
         taskService.deleteById(id);
         return  ResponseEntity.noContent().build();
@@ -65,7 +77,10 @@ public class TaskController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Update task")
+    @Operation(
+            summary = "Update task",
+            description = "Update the details of a specific task by its ID. Requires JWT authentication."
+    )
     ResponseEntity<EntityModel<Task>> updateTask(@PathVariable UUID id, @RequestBody TaskDto taskDto){
         Task updatedTask = taskService.updateById(id, taskDto);
         EntityModel<Task> entityModel = taskAssembler.toModel(updatedTask);

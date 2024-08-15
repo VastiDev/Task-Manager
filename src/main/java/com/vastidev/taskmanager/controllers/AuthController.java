@@ -27,7 +27,7 @@ public class AuthController {
     private final UserDetailsService userDetailsService;
 
     @PostMapping("/login")
-    @Operation(summary = "Login user and return JWT token")
+    @Operation(summary = "Login user and return JWT token", description = "Step 2: Authenticate with username and password to get the JWT token.")
     public ResponseEntity<AuthenticationResponse> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authenticationRequest.username(), authenticationRequest.password())

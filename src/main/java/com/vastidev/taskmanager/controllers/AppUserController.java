@@ -31,7 +31,7 @@ public class AppUserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Add new User")
+    @Operation(summary = "Add new User", description = "Step 1: Create a new user account. Step 2: go to login session above!")
     public ResponseEntity<EntityModel<AppUserResponse>> addUser(@RequestBody AppUserDto userDto) {
         AppUser newUser = userService.save(userDto);
         EntityModel<AppUserResponse> entityModel = appUserAssembler.toModel(newUser);
@@ -41,7 +41,7 @@ public class AppUserController {
 
     @GetMapping("/{idUser}")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Get User by Id")
+    @Operation(summary = "Get User by Id", description = "Retrieve user details. Requires JWT generated in Step 2.")
     public EntityModel<AppUserResponse> userById(@PathVariable UUID idUser) {
         AppUser foundUser = userService.findById(idUser);
         return appUserAssembler.toModel(foundUser);
@@ -49,7 +49,7 @@ public class AppUserController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Get all Users")
+    @Operation(summary = "Get all Users", description = "Retrieve all users. Requires JWT generated in Step 2" )
     public CollectionModel<EntityModel<AppUserResponse>> getAll() {
         List<AppUser> userList = userService.getAll();
         return appUserAssembler.toCollectionModel(userList);
@@ -57,7 +57,7 @@ public class AppUserController {
 
     @DeleteMapping("/{idUser}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Operation(summary = "Delete User by Id")
+    @Operation(summary = "Delete User by Id", description = "Delete a user. Requires JWT generated in Step 2.")
     public ResponseEntity<Void> deleteUser(@PathVariable UUID idUser) {
         userService.deleteById(idUser);
         return ResponseEntity.noContent().build();
@@ -65,7 +65,7 @@ public class AppUserController {
 
     @PutMapping("/{idUser}")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Update User by Id")
+    @Operation(summary = "Update User by Id", description = "Update a user's details. Requires JWT generated in Step 2.")
     public ResponseEntity<EntityModel<AppUserResponse>> updateUser(@PathVariable UUID idUser, @RequestBody AppUserDto userDto) {
         AppUser updatedUser = userService.updateById(idUser, userDto);
         EntityModel<AppUserResponse> entityModel = appUserAssembler.toModel(updatedUser);
