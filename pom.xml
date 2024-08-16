@@ -170,6 +170,16 @@
                 </executions>
             </plugin>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <environmentVariables>
+                        <JWT_SECRET_KEY>default-secret-key</JWT_SECRET_KEY>
+                    </environmentVariables>
+                </configuration>
+            </plugin>
+
         </plugins>
         <finalName>task-manager</finalName>
     </build>
