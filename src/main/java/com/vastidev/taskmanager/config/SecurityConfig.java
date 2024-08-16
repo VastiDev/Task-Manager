@@ -31,6 +31,7 @@ public class SecurityConfig {
 
     private final AppUserRepository userRepository;
 
+
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> userRepository.findByUsername(username)
@@ -53,6 +54,7 @@ public class SecurityConfig {
                         authorizeRequests
                                 .requestMatchers(HttpMethod.POST, "/user").permitAll()
                                 .requestMatchers("/auth/login").permitAll()
+                                .requestMatchers("/", "/index.html").permitAll()
                                 .requestMatchers(
                                         "/v3/api-docs/**",
                                         "/swagger-ui/**",
